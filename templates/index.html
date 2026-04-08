@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Painel em Tempo Real</h2>
+    
+    <div class="row">
+        <!-- Gráfico -->
+        <div class="col-md-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Variação Temporal</h5>
+                    <canvas id="sensorChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resumo das Últimas -->
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Última Leitura</h5>
+                    {% if leituras %}
+                        <p class="display-4 text-primary">{{ leituras[0]['temperatura'] | round(1) }}°C</p>
+                        <p class="display-6 text-info">{{ leituras[0]['umidade'] | round(1) }}% UR</p>
+                        <p class="text-muted"><small>Atualizado em: {{ leituras[0]['timestamp'] }}</small></p>
+                    {% else %}
+                        <p>Nenhuma leitura ainda.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h4 class="mt-4">Últimas 10 Leituras</h4>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Temperatura (°C)</th>
+                    <th>Umidade (%)</th>
+                    <th>Pressão (hPa)</th>
+                    <th>Data/Hora</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for leitura in leituras %}
+                <tr>
+                    <td>{{ leitura.id }}</td>
+                    <td>{{ leitura.temperatura }}</td>
+                    <td>{{ leitura.umidade }}</td>
+                    <td>{{ leitura.pressao or '--' }}</td>
+                    <td>{{ leitura.timestamp }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="5" class="text-center">Nenhum dado disponível. Ligue o MQTT!</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+// Pegar dados do Jinja para injetar no Chart.js
+const leiturasData = {{ leituras | tojson | safe }};
+
+// Como os dados vêm do mais recente para o mais antigo, vamos inverter para o gráfico ir da esquerda (antigo) para a direita (novo)
+leiturasData.reverse();
+
+const labels = leiturasData.map(L => {
+    // Pega só a parte da hora (HH:MM:SS) 
+    const dataHora = new Date(L.timestamp);
+    return L.timestamp.split(' ')[1] || L.timestamp; 
+});
+
+const temps = leiturasData.map(L => L.temperatura);
+const umids = leiturasData.map(L => L.umidade);
+
+const ctx = document.getElementById('sensorChart').getContext('2d');
+const sensorChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: labels,
+        datasets: [
+            {
+                label: 'Temperatura (°C)',
+                data: temps,
+                borderColor: 'rgba(255, 99, 132, 1)',
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                tension: 0.3,
+                fill: true
+            },
+            {
+                label: 'Umidade (%)',
+                data: umids,
+                borderColor: 'rgba(54, 162, 235, 1)',
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                tension: 0.3,
+                fill: true
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: false
+            }
+        }
+    }
+});
+
+// Refresh automático da página a cada 10 segundos
+setTimeout(function(){
+   window.location.reload();
+}, 10000);
+</script>
+{% endblock %}
