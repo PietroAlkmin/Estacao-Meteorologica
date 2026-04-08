@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Histórico Completo</h2>
+        <a href="/" class="btn btn-secondary">Voltar ao Painel</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Temperatura (°C)</th>
+                    <th>Umidade (%)</th>
+                    <th>Pressão (hPa)</th>
+                    <th>Localização</th>
+                    <th>Data/Hora</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for leitura in leituras %}
+                <tr id="row-{{ leitura.id }}">
+                    <td>{{ leitura.id }}</td>
+                    <td>{{ leitura.temperatura }}</td>
+                    <td>{{ leitura.umidade }}</td>
+                    <td>{{ leitura.pressao or '--' }}</td>
+                    <td>{{ leitura.localizacao }}</td>
+                    <td>{{ leitura.timestamp }}</td>
+                    <td>
+                        <a href="/editar/{{ leitura.id }}" class="btn btn-sm btn-primary">Editar</a>
+                        <button class="btn btn-sm btn-danger" onclick="deletarLeitura({{ leitura.id }})">Deletar</button>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="7" class="text-center">Nenhum dado registrado.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
