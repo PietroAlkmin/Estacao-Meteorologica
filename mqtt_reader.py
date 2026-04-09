@@ -9,13 +9,13 @@ TOPIC = "estacao/inteli/sensores/mock"
 
 API_URL = 'http://localhost:5000/leituras'
 
-def on_connect(client, userdata, flags, rc):
-    if rc == 0:
+def on_connect(client, userdata, flags, reason_code, properties):
+    if reason_code == 0:
         print(f"Conectado com sucesso ao broker MQTT: {BROKER}:{PORT}")
         client.subscribe(TOPIC)
         print(f"Inscrito no tópico: {TOPIC}")
     else:
-        print(f"Falha ao conectar. Código de resultado: {rc}")
+        print(f"Falha ao conectar. Código de resultado: {reason_code}")
 
 def on_message(client, userdata, msg):
     payload = msg.payload.decode('utf-8')
