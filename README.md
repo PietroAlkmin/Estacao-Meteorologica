@@ -1,4 +1,14 @@
-# Sistema de Medicao de Estacao Meteorologica IoT
+# Estacao Meteorologica IoT
+
+Este projeto e uma aplicacao IoT para testar a comunicacao de sensores com uma plataforma web usando backend em Python e banco de dados SQLite.
+
+Como nao temos o hardware fisico disponivel agora, construimos uma simulacao por software. O arquivo simulador.py cria dados de temperatura, umidade e pressao. Ele os envia para um broker publico Mosquitto via protocolo MQTT. Isso ajuda a simular o funcionamento das placas e modulos como se fossem reais.
+
+O fluxo do projeto se inicia no simulador gerando os valores e enviando ao servidor MQTT. O script mqtt_reader.py fica ativo aguardando essas informacoes e assim que elas chegam ele realiza um envio via HTTP POST para a API do site. A aplicacao principal feita em Flask recebe as informacoes da leitura e usa o database.py para guarda las no banco de dados. 
+
+O painel de monitoramento web le esses valores salvos no banco de dados e os exibe atraves de tabelas e graficos animados para facilitar a compreensao dos modulos da estacao. 
+
+Para colocar a aplicacao no ar certifique de ter ativado o ambiente virtual em tres terminais separados. No primeiro terminal digite python main.py para rodar o site. No segundo terminal inicie o leitor MQTT rodando python mqtt_reader.py. No terceiro e ultimo terminal ative os envios rodando python simulador.py e os dados comecarao a aparecer assim que voce acessar localhost:5000 no seu navegador padrao.# Sistema de Medicao de Estacao Meteorologica IoT
 
 ## 1. Apresentacao
 Este e um projeto desenvolvido para a atividade ponderada do Modulo 5 (Engenharia da Computacao).

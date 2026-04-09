@@ -6,7 +6,6 @@ function deletarLeitura(id) {
         .then(response => response.json())
         .then(data => {
             if (data.status === 'deletado') {
-                // Remover a linha da tabela
                 const row = document.getElementById(`row-${id}`);
                 if (row) row.remove();
                 alert('Leitura deletada com sucesso!');

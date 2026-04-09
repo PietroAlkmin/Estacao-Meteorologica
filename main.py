@@ -4,11 +4,8 @@ import database
 app = Flask(__name__)
 database.init_db()
 
-# --- Rotas da Estação Meteorológica ---
-
 @app.route('/')
 def index():
-    # Painel principal: exibe as últimas 10 leituras
     leituras = database.listar_leituras(limite=10)
     return render_template('index.html', leituras=leituras)
 
@@ -27,7 +24,6 @@ def gerenciar_leituras():
         return jsonify({'id': id_novo, 'status': 'criado'}), 201
         
     elif request.method == 'GET':
-        # Histórico completo
         listar_todas = database.listar_leituras(limite=100)
         return render_template('historico.html', leituras=listar_todas)
 
@@ -40,7 +36,6 @@ def detalhe_leitura(id_leitura):
 
 @app.route('/leituras/<int:id_leitura>/atualizar', methods=['PUT', 'POST'])
 def atualizar_leitura(id_leitura):
-    # Form HTML via POST e API via PUT
     if request.is_json:
         dados = request.get_json(silent=True)
     else:
@@ -53,7 +48,6 @@ def atualizar_leitura(id_leitura):
 
 @app.route('/leituras/<int:id_leitura>/deletar', methods=['DELETE', 'POST'])
 def deletar_leitura(id_leitura):
-    # Suporte POST para deletar direto do HTML Form sem JS também
     sucesso = database.deletar_leitura(id_leitura)
     if sucesso:
         return jsonify({'status': 'deletado'})

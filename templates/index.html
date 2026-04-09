@@ -5,7 +5,6 @@
     <h2 class="mb-4">Painel em Tempo Real</h2>
     
     <div class="row">
-        <!-- Gráfico -->
         <div class="col-md-8">
             <div class="card shadow-sm mb-4">
                 <div class="card-body">
@@ -15,7 +14,6 @@
             </div>
         </div>
 
-        <!-- Resumo das Últimas -->
         <div class="col-md-4">
             <div class="card shadow-sm mb-4">
                 <div class="card-body">
@@ -62,14 +60,11 @@
 </div>
 
 <script>
-// Pegar dados do Jinja para injetar no Chart.js
 const leiturasData = {{ leituras | tojson | safe }};
 
-// Como os dados vêm do mais recente para o mais antigo, vamos inverter para o gráfico ir da esquerda (antigo) para a direita (novo)
 leiturasData.reverse();
 
 const labels = leiturasData.map(L => {
-    // Pega só a parte da hora (HH:MM:SS) 
     const dataHora = new Date(L.timestamp);
     return L.timestamp.split(' ')[1] || L.timestamp; 
 });
@@ -111,7 +106,6 @@ const sensorChart = new Chart(ctx, {
     }
 });
 
-// Refresh automático da página a cada 10 segundos
 setTimeout(function(){
    window.location.reload();
 }, 10000);

@@ -3,7 +3,6 @@ import json
 import time
 import random
 
-# Configurações do MQTT (mesmas do ESP32/mqtt_reader)
 BROKER = "test.mosquitto.org"
 PORT = 1883
 TOPIC = "estacao/inteli/sensores/mock"
@@ -18,7 +17,6 @@ def iniciar_simulador():
     
     try:
         while True:
-            # Gerar dados realistas
             temp = round(random.uniform(15.0, 35.0), 2)
             umid = round(random.uniform(40.0, 80.0), 2)
             pressao = round(random.uniform(1000.0, 1020.0), 2)
@@ -34,7 +32,6 @@ def iniciar_simulador():
             
             print(f"Publicado no tópico '{TOPIC}': {payload}")
             
-            # Aguarda 5 segundos antes da próxima leitura
             time.sleep(5)
             
     except KeyboardInterrupt:

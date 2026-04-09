@@ -3,12 +3,10 @@ import time
 import requests
 import paho.mqtt.client as mqtt
 
-# Configurações do MQTT
 BROKER = "test.mosquitto.org"
 PORT = 1883
-TOPIC = "estacao/inteli/sensores/mock"  # Você pode alterar esse tópico caso precise
+TOPIC = "estacao/inteli/sensores/mock"
 
-# URL da nossa API Flask
 API_URL = 'http://localhost:5000/leituras'
 
 def on_connect(client, userdata, flags, rc):
@@ -26,7 +24,6 @@ def on_message(client, userdata, msg):
     try:
         dados = json.loads(payload)
         
-        # Envia os dados para a API Flask via POST
         print("Enviando para a API Flask...")
         response = requests.post(API_URL, json=dados)
         
@@ -42,7 +39,6 @@ def on_message(client, userdata, msg):
         print("A API no Flask (app.py/main.py) está rodando na porta 5000?")
 
 def iniciar_mqtt():
-    # Usando a versão correta da API do Paho MQTT para evitar mensagens estranhas no terminal
     client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
     client.on_connect = on_connect
     client.on_message = on_message
@@ -50,7 +46,6 @@ def iniciar_mqtt():
     try:
         print(f"Tentando conexão com o broker {BROKER}...")
         client.connect(BROKER, PORT, 60)
-        # Mantém a conexão ativa "escutando" as mensagens
         client.loop_forever()
     except KeyboardInterrupt:
         print("\nEncerrando leitura do MQTT.")
