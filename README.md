@@ -1,14 +1,14 @@
 # Estacao Meteorologica IoT
 
-Este projeto e uma aplicacao IoT para testar a comunicacao de sensores com uma plataforma web usando backend em Python e banco de dados SQLite.
+Este projeto e uma aplicacao IoT que desenvolvi para testar a comunicacao de sensores com uma plataforma web usando um backend em Python e banco de dados SQLite.
 
-Como nao temos o hardware fisico disponivel agora, construimos uma simulacao por software. O arquivo simulador.py cria dados de temperatura, umidade e pressao. Ele os envia para um broker publico Mosquitto via protocolo MQTT. Isso ajuda a simular o funcionamento das placas e modulos como se fossem reais.
+Embora eu tenha o hardware fisico disponivel, optei por construir uma simulacao por software para agilizar os meus testes. O arquivo simulador.py cria dados de temperatura, umidade e pressao e os envia para um broker publico Mosquitto via protocolo MQTT simulando o funcionamento das placas como se fossem reais.
 
-O fluxo do projeto se inicia no simulador gerando os valores e enviando ao servidor MQTT. O script mqtt_reader.py fica ativo aguardando essas informacoes e assim que elas chegam ele realiza um envio via HTTP POST para a API do site. A aplicacao principal feita em Flask recebe as informacoes da leitura e usa o database.py para guarda las no banco de dados. 
+O fluxo do meu projeto se inicia no simulador gerando os valores e enviando ao servidor MQTT. O meu script mqtt_reader.py fica ativo aguardando essas informacoes e assim que elas chegam ele realiza um envio via HTTP POST para a API do meu site. A minha aplicacao principal feita em Flask recebe as informacoes da leitura e usa o database.py para guarda las no banco de dados. 
 
-O painel de monitoramento web le esses valores salvos no banco de dados e os exibe atraves de tabelas e graficos animados para facilitar a compreensao dos modulos da estacao. 
+O meu painel de monitoramento web le esses valores salvos no banco de dados e os exibe atraves de tabelas e graficos animados para facilitar a visualizacao das medicoes da minha estacao. 
 
-Para colocar a aplicacao no ar certifique de ter ativado o ambiente virtual em tres terminais separados. No primeiro terminal digite python main.py para rodar o site. No segundo terminal inicie o leitor MQTT rodando python mqtt_reader.py. No terceiro e ultimo terminal ative os envios rodando python simulador.py e os dados comecarao a aparecer assim que voce acessar localhost:5000 no seu navegador padrao.# Sistema de Medicao de Estacao Meteorologica IoT
+Para colocar a minha aplicacao no ar eu preciso ativar o ambiente virtual em tres terminais separados. No primeiro terminal eu digito python main.py para rodar o site. No segundo terminal eu inicio o leitor MQTT rodando python mqtt_reader.py. No terceiro e ultimo terminal eu ativo os envios rodando python simulador.py e entao os dados comecam a aparecer assim que eu acesso localhost:5000 no meu navegador padrao.# Sistema de Medicao de Estacao Meteorologica IoT
 
 ## 1. Apresentacao
 Este e um projeto desenvolvido para a atividade ponderada do Modulo 5 (Engenharia da Computacao).
