@@ -16,11 +16,8 @@ Consiste em um sistema completo simulando uma estacao meteorologica.
 
 ## 2. Decisoes de Arquitetura e Justificativas
 
-De acordo com as instucoes do PDF (Item 5.2):
-> "Caso os sensores físicos não estejam disponíveis, implemente um modo de simulação no próprio Arduino (ou em Python) que gere valores aleatórios realistas. Documente essa decisão."
-
 **Decisões tomadas:**
-1. **Simulação por Software (Sem hardware físico):** Criamos o script `simulador.py` na linguagem Python. Ele gera valores perfeitamente enquadrados em amostras climáticas reais para Temperatura (15ºC~35ºC), Umidade (40%~80%) e Pressão (1000~1020 hPa). 
+1. **Simulação por Software (Sem hardware físico):** Criamos o script `simulador.py` na linguagem Python. Ele gera valores perfeitamente enquadrados em amostras climáticas reais para Temperatura (15ºC~35ºC), Umidade (40% 80%) e Pressão (1000 1020 hPa). 
 2. **Substituição da Porta Serial por MQTT:** Em vez de conectar via cabo Serial `COM`, estamos enviando os dados JSON para o broker público `test.mosquitto.org` (Tópico: `estacao/inteli/sensores/mock`). 
 3. **Escuta do Brokder (Ponte MQTT->Flask):** O script `mqtt_reader.py` assina o tópico no broker, capta as medições assim que chegam, os decodifica e realiza um POST na rota `/leituras` da API Flask localmente (atuando como a camada "Serial" proposta na arquitetura inicial, só que via rede).
 
